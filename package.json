@@ -1,0 +1,37 @@
+{
+  "name": "stock_sql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "concurrently \"node watch.mjs\" \"npx tsc -w\" \"nodemon dist/app.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/lodash": "^4.14.194",
+    "@types/mysql": "^2.15.21",
+    "@types/node": "^18.15.11",
+    "@types/node-cron": "^3.0.7",
+    "@types/validator": "^13.7.15",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.0.1",
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.17.17",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.21",
+    "mysql": "^2.18.1",
+    "node-cron": "^3.0.2",
+    "twilio": "^4.10.0",
+    "typescript": "^5.0.4",
+    "validator": "^13.9.0"
+  }
+}
