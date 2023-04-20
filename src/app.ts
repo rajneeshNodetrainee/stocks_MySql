@@ -11,7 +11,7 @@ const app:Application = express();
 connectDb();
 dotenv.config({path: dotenvPath})
 
-cron.schedule("10 10 * * *", ()=>{
+cron.schedule("26 10 * * *", ()=>{
 	updateStockDailyAt10();
 })
 

@@ -3,7 +3,6 @@ import { Request } from "../types";
 import { fetchLast7DaysData } from "../modules/fetchLast7DaysData";
 import { isValidSymbol } from "../modules/isValidSymbol";
 import { connection } from "../database_connection/mysql";
-import { json } from "stream/consumers";
 
 export const getStock = async (req: Request, res: Response) => {
     try {
@@ -35,30 +34,27 @@ export const getStock = async (req: Request, res: Response) => {
                 }
             })
 
-            // const isSymbolPresent = await Stock.find({ symbol: stockSymbol.toUpperCase() }, { userId: 0 })
-            // // console.log("isSymbolPresent", isSymbolPresent)
-            // if (isSymbolPresent.length) {
-            //     return res.status(200).json({ stockDetails: isSymbolPresent })
-            // }
             const isSymbolPresent = `select * from stock where symbol='${stockSymbol.toUpperCase()}'`;
             connection.query(isSymbolPresent, async (err, rows)=>{
                 if(err){
                     return res.status(400).json({error: err.message})
                 }
                 if(rows.length){
-                    return res.status(200).json({foundData: rows[0].stockDetails})
+                    //parsing the data before output because stringify doesn't looks good.
+                    const data = rows[0].stockDetails;
+                    const parsedData = JSON.parse(data);
+                    return res.status(200).json({foundData: parsedData})
                 }
                 const last7DaysData = await fetchLast7DaysData(stockSymbol as string);
-                const finaldata = JSON.stringify(last7DaysData)
+                //because longText type field doesn't contain JSON object. We must stringify it first then save it. While showning the finalData we should reverse JSON.stringify() by JSON.parse()
+                const finaldata = JSON.stringify(last7DaysData)  
                 console.log(last7DaysData)
                 if (last7DaysData == 'noData') {
                     return res.status(404).json({ error: `No company has ${stockSymbol} as their stock symbol` })
                 }
 
                 const saveStock = `INSERT INTO stock (email,symbol,stockDetails) VALUES(?,?,?)`;
-                // if(stockSymbol){
-                //     stockSymbol = stockSymbol.toUpperCase()
-                // }
+                
                 connection.query(saveStock,[email,(stockSymbol as string).toUpperCase(), finaldata], (err)=>{
                     if(err){
                         console.log("Second error")
